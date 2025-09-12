@@ -41,7 +41,7 @@ function stop()
 	endsong = true
 end
 
-local function nextLine()
+function nextLine()
 	if host:isHost() then
 		currentLine = song["song"][line]
 		pings.playline(instruments, currentLine)
