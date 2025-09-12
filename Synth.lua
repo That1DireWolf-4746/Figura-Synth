@@ -52,7 +52,7 @@ local function nextLine()
 	end
 end
 
-local function pings.playline(list, currentline)
+function pings.playline(list, currentline)
 	local instruments = list
 	for _, note in ipairs(currentline) do
 			sounds:playSound("block.note_block." .. instruments[note[1]], player:getPos() + vec(0, 0.1, 0), 1, (pitch[note[2]] * 2^(note[3] - 4)), false)
