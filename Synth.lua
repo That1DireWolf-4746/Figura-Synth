@@ -41,7 +41,7 @@ function stop()
 	endsong = true
 end
 
-function nextLine()
+local function nextLine()
 	if host:isHost() then
 		currentLine = song["song"][line]
 		pings.playline(instruments, currentLine)
@@ -52,7 +52,7 @@ function nextLine()
 	end
 end
 
-function pings.playline(list, currentline)
+local function pings.playline(list, currentline)
 	local instruments = list
 	for _, note in ipairs(currentline) do
 			sounds:playSound("block.note_block." .. instruments[note[1]], player:getPos() + vec(0, 0.1, 0), 1, (pitch[note[2]] * 2^(note[3] - 4)), false)
