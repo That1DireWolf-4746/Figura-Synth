@@ -3,7 +3,7 @@ Note Block Sythesizer for Figura Mod, template JSON file included. Uses [json.lu
 
 ```template.lua``` goes in ```figura/data/music```
 
-```Synth.lua``` goes in your avatar folder
+```Synth.lua``` and ```json.lua``` goes in your avatar folder
 
 #### Functions:  
 ```play([filename])``` to start playing the song  
