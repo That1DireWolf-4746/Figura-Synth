@@ -6,5 +6,6 @@ Note Block Sythesizer for Figura Mod, template JSON file included. Uses [json.lu
 ```Synth.lua``` and ```json.lua``` goes in your avatar folder
 
 #### Functions:  
-```play([filename])``` to start playing the song  
-```stop([filename])``` to stop playing the song
+```play([filename])``` to start playing music and add file to queue  
+```stop()``` to stop playing music
+```clear()``` to clear the queue
