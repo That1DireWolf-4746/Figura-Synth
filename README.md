@@ -7,5 +7,5 @@ Note Block Sythesizer for Figura Mod, template JSON file included. Uses [json.lu
 
 #### Functions:  
 ```play([filename])``` to start playing music and add file to queue  
-```stop()``` to stop playing music
-```clear()``` to clear the queue
+```stop()``` to stop adding file to queue  
+```clear()``` to clear the queue  
