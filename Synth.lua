@@ -54,6 +54,7 @@ function try( err )
    		print( "Invalid JSON file:", err )
    	end
 	stop()
+	clear()
 	return nil
 end
 
@@ -69,7 +70,7 @@ function play(sn)
 			songName = sn
 			xpcall(readFile, try)
 			if song == nil then
-				goto continue
+				return nil
 			end
 			instruments = song["instruments"]
 			pings.sendInstruments(instruments)
@@ -79,11 +80,11 @@ function play(sn)
 			stop()
 		end
 	end
-	::continue::
 end
 
 function stop()
 	endsong = true
+	song = nil
 	songName = ""
 	line = 1
 	currentLine = {}
