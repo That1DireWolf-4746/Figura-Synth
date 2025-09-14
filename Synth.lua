@@ -49,13 +49,28 @@ function events.chat_send_message(msg)
 	return msg
 end
 
+function try( err )
+	if host:isHost() then
+   		print( "Invalid JSON file:", err )
+   	end
+	stop()
+	return nil
+end
+
+function readFile()
+	song = json.decode(file:readString("music/" .. songName .. ".json"))
+end
+
 function play(sn)
 	endsong = false
 	line = 1
 	if host:isHost() then
 		if file:isFile("music/" .. sn .. ".json") then
 			songName = sn
-			song = json.decode(file:readString("music/" .. sn .. ".json"))
+			xpcall(readFile, try)
+			if song == nil then
+				goto continue
+			end
 			instruments = song["instruments"]
 			pings.sendInstruments(instruments)
 			nextSet()
@@ -64,6 +79,7 @@ function play(sn)
 			stop()
 		end
 	end
+	::continue::
 end
 
 function stop()
@@ -134,7 +150,7 @@ function parse()
 	if  endOfFileLocation ~= nil then
 		if endOfFileLocation <= 3 then
 			if host:isHost() then
-				print("End of file")
+				print("End of playback")
 				stop()
 				clear()
 			end
