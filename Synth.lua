@@ -68,7 +68,7 @@ end
 
 function stop()
 	endsong = true
-	line = 1
+	songName = ""
 	currentLine = {}
 end
 
@@ -78,27 +78,26 @@ function clear()
 end
 
 function nextSet()
+	line = 1
 	local ticker = 0
 	local toSend = ""
 	while ticker < PACKETTIME do
 		local currentLine = song["song"][line]
 		line = line + 1
 		ticker = ticker + 1
-		if song["song"][line] == nil then
-			pings.sentCurrentSet(toSend)
+		if currentLine[1] == "END" then
+			toSend = toSend .. "|"
 			stop()
-			return nil
-		end
-		if currentLine == "END" then
-				toSend = toSend .. "|"
+			goto continue
 		elseif currentLine[1] ~= nil then
 			toSend = toSend .. ";" .. tostring(ticker - 1) .. "-"
-		end
-		for _, note in ipairs(currentLine) do
-			toSend = toSend .. tostring(note[1]) .. note[2] .. note[3] .. "-"
+			for _, note in ipairs(currentLine) do
+				toSend = toSend .. tostring(note[1]) .. note[2] .. note[3] .. "-"
+			end
 		end
 		
 	end
+	::continue::
 	pings.sentCurrentSet(toSend)
 end
 
@@ -134,8 +133,10 @@ function parse()
 	end
 	local endOfFileLocation = string.find(currentSet, "|", 1)
 	if  endOfFileLocation ~= nil then
-		if endOfFileLocation <= 3 then
-			print("End of file")
+		if endOfFileLocation == 1 then
+			if host:isHost() then
+				print("End of file")
+			end
 			return nil
 		end
 	end
