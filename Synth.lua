@@ -69,6 +69,7 @@ end
 function stop()
 	endsong = true
 	songName = ""
+	line = 1
 	currentLine = {}
 end
 
@@ -135,6 +136,7 @@ function parse()
 			if host:isHost() then
 				print("End of file")
 				stop()
+				clear()
 			end
 			return nil
 		end
