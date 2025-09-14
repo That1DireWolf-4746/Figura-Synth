@@ -30,15 +30,39 @@ function events.tick()
 	end
 end
 
+function events.chat_send_message(msg)
+	local playCommand = (string.find(msg, ".play ", 1))
+	if playCommand ~= nil then
+		if playCommand == 1 then
+			play(string.sub(msg, 7, -1))
+			return nil
+		end
+	end
+	local stopCommand = (string.find(msg, ".stop", 1))
+	if stopCommand ~= nil then
+		if stopCommand == 1 then
+			stop()
+			clear()
+			return nil
+		end
+	end
+	return msg
+end
+
 function play(sn)
 	endsong = false
 	line = 1
 	if host:isHost() then
-		songName = sn
-		song = json.decode(file:readString("music/" .. songName .. ".json"))
-		instruments = song["instruments"]
-		pings.sendInstruments(instruments)
-		nextSet()
+		if file:isFile("music/" .. sn .. ".json") then
+			songName = sn
+			song = json.decode(file:readString("music/" .. sn .. ".json"))
+			instruments = song["instruments"]
+			pings.sendInstruments(instruments)
+			nextSet()
+		else
+			print("File Not Found!")
+			stop()
+		end
 	end
 end
 
@@ -65,7 +89,9 @@ function nextSet()
 			stop()
 			return nil
 		end
-		if currentLine[1] ~= nil then
+		if currentLine == "END" then
+				toSend = toSend .. "|"
+		elseif currentLine[1] ~= nil then
 			toSend = toSend .. ";" .. tostring(ticker - 1) .. "-"
 		end
 		for _, note in ipairs(currentLine) do
@@ -81,7 +107,7 @@ function playLine()
 	if toPlay ~= nil then
 		for _, note in ipairs(toPlay) do
 			sounds["block.note_block." .. instruments[note[1]]]:play()
-					:setPos(player:getPos() + vec(0, 0.1, 0))
+					:setPos(player:getPos() + vec(0, 1, 0))
 					:setPitch((pitch[note[2]] * 2^(note[3] - 4)))
 		end
 	end
@@ -103,6 +129,16 @@ function setLengthBelowLimit()
 end
 
 function parse()
+	if currentSet == nil then
+		return nil
+	end
+	local endOfFileLocation = string.find(currentSet, "|", 1)
+	if  endOfFileLocation ~= nil then
+		if endOfFileLocation <= 3 then
+			print("End of file")
+			return nil
+		end
+	end
 	local nextpos = string.find(currentSet, ";", 2)
 	if nextpos == nil then
 		nextpos = -1
