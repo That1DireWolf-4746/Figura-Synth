@@ -8,7 +8,7 @@ With thanks to yingcan.
 
 #### Functions:  
 ```play([filename])``` to start playing music and add file to queue  
-```stop()``` to stop playing music
+```stop()``` to stop playing music  
 ```clear()``` to clear the queue  
 
 #### Chat Commands:
