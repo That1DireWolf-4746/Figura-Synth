@@ -12,5 +12,5 @@ With thanks to yingcan.
 ```clear()``` to clear the queue  
 
 #### Chat Commands:
-```.play filename``` to start playing music
+```.play filename``` to start playing music  
 ```.stop``` to stop playing music
