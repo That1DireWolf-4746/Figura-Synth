@@ -7,7 +7,7 @@ With thanks to yingcan.
 ```Synth.lua``` and ```json.lua``` goes in your avatar folder
 
 #### Functions:  
-```play([filename])``` to start playing music and add file to queue  
+```play(filename)``` to start playing music and add file to queue  
 ```stop()``` to stop playing music  
 ```clear()``` to clear the queue  
 
