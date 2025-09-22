@@ -14,3 +14,4 @@ With thanks to yingcan.
 #### Chat Commands:
 ```.play filename``` to start playing music  
 ```.stop``` to stop playing music
+```.localplay filename``` to play music but only locally (for example if you don't want to disturb other people). **TURN OFF SYNCED PINGS** if you use this command.
