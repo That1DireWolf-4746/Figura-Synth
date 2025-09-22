@@ -8,6 +8,7 @@ With thanks to yingcan.
 
 #### Functions:  
 ```play(filename)``` to start playing music and add file to queue  
+```playLocal(filename)``` to start playing music locally and add file to queue. **TURN OFF SYNCED PINGS** if you use this function.  
 ```stop()``` to stop playing music  
 ```clear()``` to clear the queue  
 
