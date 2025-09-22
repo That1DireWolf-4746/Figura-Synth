@@ -32,9 +32,16 @@ end
 
 function events.chat_send_message(msg)
 	local playCommand = (string.find(msg, ".play ", 1))
+	local localPlayCommand = (string.find(msg, ".localplay ", 1))
 	if playCommand ~= nil then
 		if playCommand == 1 then
 			play(string.sub(msg, 7, -1))
+			return nil
+		end
+	end
+	if localPlayCommand ~= nil then
+		if localPlayCommand == 1 then
+			playLocal(string.sub(msg, 12, -1))
 			return nil
 		end
 	end
@@ -74,7 +81,29 @@ function play(sn)
 			end
 			instruments = song["instruments"]
 			pings.sendInstruments(instruments)
-			nextSet()
+			nextSet(true)
+		else
+			print("File Not Found!")
+			stop()
+		end
+	end
+end
+
+
+function playLocal(sn)
+	endsong = false
+	line = 1
+	if host:isHost() then
+		if file:isFile("music/" .. sn .. ".json") then
+			songName = sn
+			xpcall(readFile, try)
+			if song == nil then
+				return nil
+			end
+			instruments = song["instruments"]
+			if song ~= nil then
+				nextSet(false)
+			end
 		else
 			print("File Not Found!")
 			stop()
@@ -95,7 +124,7 @@ function clear()
 	_nextNote = 0
 end
 
-function nextSet()
+function nextSet(localplay)
 	local ticker = 0
 	local toSend = ""
 	while ticker < PACKETTIME do
@@ -114,7 +143,13 @@ function nextSet()
 		end
 		
 	end
-	pings.sentCurrentSet(toSend)
+	if not localplay then
+		pings.sentCurrentSet(toSend)
+	else
+		if host:isHost() then
+			currentSet = toSend
+		end
+	end
 end
 
 function playLine()
@@ -137,7 +172,10 @@ end
 
 function setLengthBelowLimit()
 	local count = 0
-	for note in string.gmatch(currentSet, ";") do
+	if currentSet == nil then
+		return false
+	end
+	for note in string.gmatch(currentSet, "[;|]") do
 		count = count + 1
 	end
 	return count < 45
@@ -194,6 +232,11 @@ function pings.sendInstruments(list)
 end
 
 function pings.sentCurrentSet(string)
-	currentSet = currentSet .. string
+	if currentSet == nil then
+		currentSet = ""
+	end
+	if string ~= nil then
+		currentSet = currentSet .. string
+	end
 	currentSet = string.match(currentSet, ";.*")
 end
