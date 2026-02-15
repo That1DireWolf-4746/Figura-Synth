@@ -57,7 +57,7 @@ function events.chat_send_message(msg)
 			clear()
 		end
 	end
-	local isMiscCommandCatcher = (string.find(msg, ".", 1))
+	local isMiscCommandCatcher = (string.find(msg, "%.", 1))
 	if isMiscCommandCatcher ~= nil then
 		if isMiscCommandCatcher == 1 then
 			return nil
