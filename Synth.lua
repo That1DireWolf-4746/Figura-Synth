@@ -9,6 +9,7 @@ local song = nil
 local endsong = false
 local currentSet = ""
 local _nextNote = 0
+local loop = false
 local pitch = {
 ["C"] = 261.63/369.99,
 ["Cs"] = 277.18/369.99,
@@ -33,16 +34,20 @@ end
 function events.chat_send_message(msg)
 	local playCommand = (string.find(msg, ".play ", 1))
 	local localPlayCommand = (string.find(msg, ".localplay ", 1))
+	local loopCommand = (string.find(msg, ".loop", 1))
 	if playCommand ~= nil then
 		if playCommand == 1 then
 			play(string.sub(msg, 7, -1))
-			return nil
 		end
 	end
 	if localPlayCommand ~= nil then
 		if localPlayCommand == 1 then
 			playLocal(string.sub(msg, 12, -1))
-			return nil
+		end
+	end
+	if loopCommand ~= nil then
+		if loopCommand == 1 then
+			toggleLoop()
 		end
 	end
 	local stopCommand = (string.find(msg, ".stop", 1))
@@ -50,6 +55,11 @@ function events.chat_send_message(msg)
 		if stopCommand == 1 then
 			stop()
 			clear()
+		end
+	end
+	local isMiscCommandCatcher = (string.find(msg, ".", 1))
+	if isMiscCommandCatcher ~= nil then
+		if isMiscCommandCatcher == 1 then
 			return nil
 		end
 	end
@@ -67,6 +77,13 @@ end
 
 function readFile()
 	song = json.decode(file:readString("music/" .. songName .. ".json"))
+end
+
+function toggleLoop()
+	if host:isHost() then
+		if loop == true then loop = false else loop = true end
+		print("Loop toggled")
+	end
 end
 
 function play(sn)
@@ -133,8 +150,13 @@ function nextSet(localplay)
 		ticker = ticker + 1
 		if currentLine ~= nil and not endsong then
 			if currentLine[1] == "END" then
-				toSend = toSend .. "|"
-				break
+				if loop then 
+					line = 0
+					currentLine = {}
+				else
+					toSend = toSend .. "|"
+					break
+				end
 			end
 			toSend = toSend .. ";" .. tostring(ticker - 1) .. "-"
 			for _, note in ipairs(currentLine) do
